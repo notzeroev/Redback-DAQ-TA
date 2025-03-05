@@ -4,8 +4,9 @@ WORKDIR /app
 COPY . .
 
 RUN npm install
-RUN npm run build
+# add 'RUN npm run build' when building for production
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+#change to ["npm", "start"] when building for production
+CMD ["npm", "run", "dev"]
