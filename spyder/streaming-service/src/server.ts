@@ -14,15 +14,39 @@ const websocketServer = new WebSocketServer({ port: WS_PORT });
 tcpServer.on("connection", (socket) => {
   console.log("TCP client connected");
 
+  let batteryWarning = 0;
+
   socket.on("data", (msg) => {
     const message: string = msg.toString();
-
-    console.log(`Received: ${message}`);
     
     // Send JSON over WS to frontend clients
     websocketServer.clients.forEach(function each(client) {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(message);
+        let tempData = JSON.parse(message);
+        let temp = tempData.battery_temperature;
+
+        console.log(`Recieved: ${message}`)
+
+        if(!isNaN(temp)){
+          client.send(message);
+          
+          if(temp < 20 || temp > 40){
+            batteryWarning++;
+          }
+          else{
+            batteryWarning--;
+          }
+
+          if(batteryWarning > 3){
+            console.log(`Warning! Battery temperature is ${temp} @ timestamp: ${tempData.timestamp}`);
+            batteryWarning--;
+          }
+        }
+        else{
+          //just logging it for now, will implement a better solution later
+          console.log(`Received invalid temperature!`);
+        }
+
       }
     });
   });

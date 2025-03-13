@@ -56,7 +56,7 @@ export default function Page(): JSX.Element {
         setConnectionStatus("Disconnected")
         break
     }
-  }, [])
+  }, [readyState])
 
   /**
    * Effect hook to handle incoming WebSocket messages.
@@ -66,7 +66,7 @@ export default function Page(): JSX.Element {
     if (lastJsonMessage === null) {
       return
     }
-    setTemperature(lastJsonMessage.battery_temperature)
+    setTemperature(lastJsonMessage.battery_temperature.toFixed(3))
   }, [lastJsonMessage])
 
   /**
@@ -94,7 +94,7 @@ export default function Page(): JSX.Element {
           <CardHeader>
             <CardTitle className="text-2xl font-light flex items-center gap-2">
               <Thermometer className="h-6 w-6" />
-              Woo (for test purposes)
+              Live Battery
             </CardTitle>
           </CardHeader>
           <CardContent className="flex items-center justify-center">
