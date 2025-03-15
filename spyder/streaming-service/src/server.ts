@@ -44,7 +44,7 @@ tcpServer.on("connection", (socket) => {
           }
         }
         else{
-          //just logging it for now, will implement a better solution later
+          client.send(JSON.stringify({"battery_temperature":null,"timestamp":1742027429558}));
           console.log(`Received invalid temperature!`);
         }
 

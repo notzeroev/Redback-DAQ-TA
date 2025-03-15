@@ -6,14 +6,13 @@ This file is used to document your thoughts, approaches and research conducted a
 
 ## Spyder
 Task 1
-- Ok so I've never deployed a dockerized react app before, so I'm trying to figure out how the flow works here.
-- It looks like with nodemon, we're configuring it so that it watches the changes in a specific file/set of files and then restarts the node app.
+- I've never deployed a dockerized react app before, so I'm trying to figure out how the flow works here. It looks like with nodemon, we're configuring it so that it watches the changes in a specific file/set of files and then restarts the node app.
 - It seems like there's no reason to set up nodemon on the ui module, as it already has turbopack (next's built-in hot reload). Ill have to speak to the redback team about this, becuase it seems like it might be better to just use turbopack unless we have an exremely specific use case for nodemon for the ui. *(Turbopack and install used is suitable, verified by redback team)*
-- So uhm I went over to the streaming-service to set up nodemon and it looks like it's already been done? I thought it's some sort of debugging task but apparently it just works. *(Confiremd to be a mistake)*
+- Upon reviewing the streaming-service to set up nodemon it seems like Nodemon has already been set up? I thought it's some sort of debugging task but apparently it just works. *(Confiremd to be a mistake)*
 
 Task 2
 - Updating the streaming service to prevent invalid data was fairly straightforward, I simply parsed the data and checked to see if the temperature was in the right format
-- As of now, I'm simply not sending the invalid data to the frontend. But I'd like to implement some sort of graph to visualize when these data points. (See task 5)
+- As of now, I'm simply not sending the invalid data to the frontend. (See update in task 5)
 
 Task 3
 - I've set up the battery warning to trigger at 3 attempts using a simple counter in the server.ts file
@@ -25,6 +24,15 @@ Task 4
 
 Task 5
 - I've updated the numeric component to have the specified colors. Opting for the implementation suggested in the file (using the cn function)
-- Nothing speccial here, but it was interesting to read up on why we use cn, and how it avoids classname collisions from **[this post](https://www.reddit.com/r/tailwindcss/comments/1egbuvx/the_buzz_around_cn_function_and_why_do_we_use_it/)**.
+    - Nothing speccial here, but it was interesting to read up on why we use cn, and how it avoids classname collisions from **[this post](https://www.reddit.com/r/tailwindcss/comments/1egbuvx/the_buzz_around_cn_function_and_why_do_we_use_it/)**.
+- Additional Features
+    - Added a theme toggle, allowing the user to switch between light and dark mode.
+    - Updated the layout to a "bento" grid. This allows for a modular layout as we can add as many bento cards as we like to display any vehicle information. Bento cards come in 3 predefined sizes
+        - I've again used shadcn ui components in order to keep visuals consistent.
+    - Added graph to visualize temperatures over the last 100 seconds. Shadcn's charts builds on top of **recharts**, so I had to add in that dependancy.
+        - The chart proved to be quite the hassle as we are updating the chart data quite frequently.
+    - Added a session uptime widget
+    - Added trackers for crossing threshold temperature, and recieving bad data from the streaming service.
+    
 
 ## Cloud
