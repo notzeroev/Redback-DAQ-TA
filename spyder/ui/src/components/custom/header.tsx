@@ -11,6 +11,7 @@ interface HeaderProps {
   connectionStatus: string;
 }
 
+//using memo to prevent unnecessary re-renders
 const Header = memo(({ connectionStatus }: HeaderProps) => {
   const { resolvedTheme, setTheme } = useTheme()
 

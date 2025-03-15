@@ -2,14 +2,10 @@
 
 import { useState, useEffect } from "react"
 import useWebSocket, { ReadyState } from "react-use-websocket"
-import { useTheme } from "next-themes"
-import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Thermometer } from "lucide-react"
+import { Thermometer, Moon, Sun } from "lucide-react"
 import Numeric from "../components/custom/numeric"
-import RedbackLogoDarkMode from "../../public/logo-darkmode.svg"
-import RedbackLogoLightMode from "../../public/logo-lightmode.svg"
+import Header from "../components/custom/header"
 
 const WS_URL = "ws://localhost:8080"
 
@@ -25,7 +21,7 @@ interface VehicleData {
  * @returns {JSX.Element} The rendered page component.
  */
 export default function Page(): JSX.Element {
-  const { setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
   const [temperature, setTemperature] = useState<any>(0)
   const [connectionStatus, setConnectionStatus] = useState<string>("Disconnected")
   const { lastJsonMessage, readyState }: { lastJsonMessage: VehicleData | null; readyState: ReadyState } = useWebSocket(
@@ -37,16 +33,29 @@ export default function Page(): JSX.Element {
   )
 
   /**
+   * Effect hook to handle client-side mounting.
+   */
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  /**
    * Effect hook to handle WebSocket connection state changes.
    */
   useEffect(() => {
     switch (readyState) {
       case ReadyState.OPEN:
         console.log("Connected to streaming service")
+
+        localStorage.setItem('temperatureData', '[]')
+
         setConnectionStatus("Connected")
         break
       case ReadyState.CLOSED:
         console.log("Disconnected from streaming service")
+
+        //ideally we would send session summary to server here for storage.
+        
         setConnectionStatus("Disconnected")
         break
       case ReadyState.CONNECTING:
@@ -67,28 +76,28 @@ export default function Page(): JSX.Element {
       return
     }
     setTemperature(lastJsonMessage.battery_temperature.toFixed(3))
+
+    try {
+      const existingData = JSON.parse(localStorage.getItem('temperatureData') || '[]')
+      const newData = [...existingData, lastJsonMessage].slice(-100)
+      localStorage.setItem('temperatureData', JSON.stringify(newData))
+
+      //add localStorage for temp warnings
+    } catch (e) {
+      console.error('Failed to save vehicle data to localStorage', e)
+    }
   }, [lastJsonMessage])
 
   /**
-   * Effect hook to set the theme to dark mode.
+   * Sets mounted to true after initial client-side render
    */
-  useEffect(() => {
-    setTheme("dark")
-  }, [setTheme])
+  if (!mounted) {
+    return <></>
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="px-5 h-20 flex items-center gap-5 border-b">
-        <Image
-          src={RedbackLogoDarkMode}
-          className="h-12 w-auto"
-          alt="Redback Racing Logo"
-        />
-        <h1 className="text-foreground text-xl font-semibold">DAQ Technical Assessment</h1>
-        <Badge variant={connectionStatus === "Connected" ? "success" : "destructive"} className="ml-auto">
-          {connectionStatus}
-        </Badge>
-      </header>
+      <Header connectionStatus={connectionStatus}/>
       <main className="flex-grow flex items-center justify-center p-8">
         <Card className="w-full max-w-md">
           <CardHeader>
@@ -97,7 +106,7 @@ export default function Page(): JSX.Element {
               Live Battery
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex items-center justify-center">
+          <CardContent className="flex items-center">
             <Numeric temp={temperature} />
           </CardContent>
         </Card>
