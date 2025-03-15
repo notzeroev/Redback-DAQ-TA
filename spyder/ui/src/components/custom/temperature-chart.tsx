@@ -11,7 +11,7 @@ interface TemperatureData {
 export function TemperatureChart() {
   const [data, setData] = useState<TemperatureData[]>([])
 
-  // Load initial data from localStorage
+  // load initial data from localStorage
   useEffect(() => {
     const loadData = () => {
       try {
@@ -19,7 +19,7 @@ export function TemperatureChart() {
         if (storedData) {
           const parsedData = JSON.parse(storedData) as TemperatureData[]
 
-          // Cap temperatures above 100
+          // cap temperatures above 100
           const processedData = parsedData.map((item) => ({
             ...item,
             battery_temperature: Math.min(item.battery_temperature, 100),
@@ -32,16 +32,12 @@ export function TemperatureChart() {
       }
     }
 
-    // Load data initially
-    loadData()
-
-    // Set up storage event listener to update when localStorage changes
+    // set up storage event listener to update when localStorage changes
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === "temperatureData" && event.newValue) {
         try {
           const parsedData = JSON.parse(event.newValue) as TemperatureData[]
 
-          // Cap temperatures above 100
           const processedData = parsedData.map((item) => ({
             ...item,
             battery_temperature: Math.min(item.battery_temperature, 100),
