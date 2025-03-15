@@ -30,6 +30,7 @@ tcpServer.on("connection", (socket) => {
         if(!isNaN(temp)){
           client.send(message);
           
+          //temporary temperatures to test limits and warnings
           if(temp < 20 || temp > 40){
             batteryWarning++;
           }
