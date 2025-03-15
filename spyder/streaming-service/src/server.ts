@@ -30,8 +30,7 @@ tcpServer.on("connection", (socket) => {
         if(!isNaN(temp)){
           client.send(message);
           
-          //temporary temperatures to test limits and warnings
-          if(temp < 20 || temp > 40){
+          if(temp < 20 || temp > 80){
             batteryWarning++;
           }
           else{
@@ -44,7 +43,7 @@ tcpServer.on("connection", (socket) => {
           }
         }
         else{
-          client.send(JSON.stringify({"battery_temperature":null,"timestamp":1742027429558}));
+          client.send(JSON.stringify({"battery_temperature":null,"timestamp":0}));
           console.log(`Received invalid temperature!`);
         }
 

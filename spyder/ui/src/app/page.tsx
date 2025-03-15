@@ -140,6 +140,7 @@ export default function Page(): JSX.Element {
 
           <BentoCard title="Session Uptime" icon={Clock} size="small">
             <div className="text-2xl font-semibold">
+              {/* Wacky stopwatch implementation. I really need an extension for this. */}
               {Math.floor(elapsedTime / 3600).toString().padStart(2, '0')}:
               {Math.floor((elapsedTime % 3600) / 60).toString().padStart(2, '0')}:
               {(elapsedTime % 60).toString().padStart(2, '0')}
@@ -184,5 +185,3 @@ export default function Page(): JSX.Element {
     </div>
   )
 }
-
-// Remove this effect from outside the component

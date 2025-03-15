@@ -54,13 +54,12 @@ export function TemperatureChart() {
       }
     }
 
-    // Listen for localStorage changes from other tabs/windows
     window.addEventListener("storage", handleStorageChange)
 
     // Set up interval to check for changes in the current tab
     const intervalId = setInterval(() => {
       loadData()
-    }, 100) // Check every 1 seconds
+    }, 100)
 
     return () => {
       window.removeEventListener("storage", handleStorageChange)
@@ -111,7 +110,7 @@ export function TemperatureChart() {
         <YAxis domain={[0, 100]} tickCount={6} tick={{ fontSize: 12 }} />
         <Tooltip content={<CustomTooltip />} />
 
-        {/* Reference line at 80°F - upper threshold */}
+        {/* Reference line at 80°C - upper threshold */}
         <ReferenceLine
           y={80}
           stroke="hsl(var(--warning, 38 92% 50%))"
@@ -119,14 +118,14 @@ export function TemperatureChart() {
           strokeWidth={2}
           opacity={0.6}
           label={{
-            value: "80°F",
+            value: "80°C",
             position: "right",
             fill: "hsl(var(--warning, 38 92% 50%))",
             fontSize: 12,
           }}
         />
 
-        {/* Reference line at 20°F - lower threshold */}
+        {/* Reference line at 20°C - lower threshold */}
         <ReferenceLine
           y={20}
           stroke="hsl(var(--info, 217 91% 60%))"
@@ -134,7 +133,7 @@ export function TemperatureChart() {
           strokeWidth={2}
           opacity={0.6}
           label={{
-            value: "20°F",
+            value: "20°C",
             position: "right",
             fill: "hsl(var(--info, 217 91% 60%))",
             fontSize: 12,

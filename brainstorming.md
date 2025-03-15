@@ -28,10 +28,14 @@ Task 5
 - Additional Features
     - Added a theme toggle, allowing the user to switch between light and dark mode.
     - Updated the layout to a "bento" grid. This allows for a modular layout as we can add as many bento cards as we like to display any vehicle information. Bento cards come in 3 predefined sizes
-        - I've again used shadcn ui components in order to keep visuals consistent.
+        - I've again used shadcn ui components in order to keep visuals consistent. Quite happy with how it turned out.
     - Added graph to visualize temperatures over the last 100 seconds. Shadcn's charts builds on top of **recharts**, so I had to add in that dependancy.
         - The chart proved to be quite the hassle as we are updating the chart data quite frequently.
+        - I tried implementing the chart with react hooks, but I found that it works better when using intervals.
+        - This would be one part of the submission that I would re-look into if I had more time.
     - Added a session uptime widget
+        - With this I learnt just how oddly challenging handling timers/stopwatches are in react. The solution that is the most popular according to the internet is the one I opted for, though I do find it bizzare.
+        - Again if I did have some more time on my hands I would look to use a plugin or something similar that streamlines this experience.
     - Added trackers for crossing threshold temperature, and recieving bad data from the streaming service.
     
 
